@@ -10,7 +10,7 @@ import Contact from './pages/Contact'
 function App() {
   return (
     <BrowserRouter>
-      <div className="min-h-screen bg-background text-text-primary">
+      <div className="min-h-screen bg-bg-DEFAULT text-tx-DEFAULT font-sans">
         <Navbar />
         <Routes>
           <Route path="/" element={<Home />} />
