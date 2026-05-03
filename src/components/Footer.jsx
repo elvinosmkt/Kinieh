@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { Instagram, MapPin, Phone, Mail, ArrowRight } from 'lucide-react'
 import Container from './ui/Container'
 import KiniehLogo from './ui/KiniehLogo'
+import { getWhatsAppGeneral } from '../data/wines'
 
 export default function Footer() {
   const [email, setEmail] = useState('')
@@ -25,10 +26,10 @@ export default function Footer() {
       <div className="relative z-10 py-16 md:py-20 border-b border-white/10">
         <Container narrow>
           <div className="text-center">
-            <span className="badge-k bg-primary/15 text-gold-bright border-primary/25 mb-4 inline-flex">Newsletter Exclusiva</span>
-            <h2 className="h3 text-white mb-4">Receba nossas novidades</h2>
+            <span className="badge-k bg-primary/15 text-gold-bright border-primary/25 mb-4 inline-flex">Newsletter</span>
+            <h2 className="h3 text-white mb-4">Fique por dentro</h2>
             <p className="body-lg text-white/50 mb-8 max-w-xl mx-auto">
-              Novos rótulos, eventos de degustação e condições especiais para parceiros — direto no seu e-mail.
+              Novos rótulos, histórias dos vinhedos e sugestões para a sua próxima taça — sem spam, prometemos.
             </p>
             <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-3 max-w-lg mx-auto">
               <input type="email" value={email} onChange={e => setEmail(e.target.value)} placeholder="Seu e-mail" required disabled={loading}
@@ -49,7 +50,7 @@ export default function Footer() {
             <div>
               <Link to="/" className="inline-block mb-6"><KiniehLogo size="md" /></Link>
               <p className="body-sm text-white/40 mb-6 leading-relaxed">
-                Importadora de vinhos premium com curadoria criteriosa de rótulos de todo o mundo.
+                Vinhos selecionados da África do Sul e Argentina para quem quer descobrir sem complicação.
               </p>
               <div className="flex gap-3">
                 <a href="https://instagram.com" target="_blank" rel="noopener noreferrer"
@@ -59,12 +60,16 @@ export default function Footer() {
               </div>
             </div>
 
-            {/* Categories */}
+            {/* Wines */}
             <div>
-              <h4 className="label text-gold-bright mb-6">Categorias</h4>
+              <h4 className="label text-gold-bright mb-6">Vinhos</h4>
               <ul className="space-y-3">
-                {['Tintos','Brancos & Rosés','Espumantes'].map(t => (
-                  <li key={t}><Link to="/portfolio" className="body-sm text-white/40 hover:text-primary transition-colors">{t}</Link></li>
+                {[
+                  { to: '/vinhos?marca=Meander', l: 'Meander Wines' },
+                  { to: '/vinhos?marca=Daschbosch', l: 'Daschbosch' },
+                  { to: '/vinhos', l: 'Todos os Vinhos' },
+                ].map(({to, l}) => (
+                  <li key={to}><Link to={to} className="body-sm text-white/40 hover:text-primary transition-colors">{l}</Link></li>
                 ))}
               </ul>
             </div>
@@ -73,9 +78,13 @@ export default function Footer() {
             <div>
               <h4 className="label text-gold-bright mb-6">Institucional</h4>
               <ul className="space-y-3">
-                {[{to:'/sobre',l:'Quem Somos'},{to:'/contato',l:'Fale Conosco'},{to:'/parceiros',l:'Onde Encontrar'}].map(({to,l}) => (
+                {[
+                  { to: '/sobre', l: 'Quem Somos' },
+                  { to: '/contato', l: 'Fale Conosco' },
+                ].map(({to, l}) => (
                   <li key={to}><Link to={to} className="body-sm text-white/40 hover:text-primary transition-colors">{l}</Link></li>
                 ))}
+                <li><a href={getWhatsAppGeneral()} target="_blank" rel="noopener noreferrer" className="body-sm text-white/40 hover:text-primary transition-colors">WhatsApp</a></li>
               </ul>
             </div>
 
@@ -102,7 +111,7 @@ export default function Footer() {
           <div className="h-px bg-white/10 mb-8" />
           <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-center md:text-left">
             <p className="text-[11px] text-white/25">&copy; {year} Kinieh Wines. Todos os direitos reservados.</p>
-            <p className="text-[11px] text-white/25 uppercase tracking-widest">Curadoria de vinhos excepcionais</p>
+            <p className="text-[11px] text-white/25 uppercase tracking-widest">Vinhos que falam a sua língua</p>
           </div>
         </Container>
       </div>

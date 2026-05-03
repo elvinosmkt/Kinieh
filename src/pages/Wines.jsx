@@ -1,41 +1,43 @@
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Search, ArrowRight, ShoppingBag, X } from 'lucide-react'
+import { Search, ArrowRight, X, Filter } from 'lucide-react'
 import { useSearchParams } from 'react-router-dom'
 import Badge from '../components/ui/Badge'
 import Button from '../components/ui/Button'
 import Container from '../components/ui/Container'
+import wines, { getWhatsAppLink } from '../data/wines'
 
-const wines = [
-  { id:1, name:'Meander Chenin Blanc', region:'Western Cape', country:'África do Sul', type:'Branco', grape:'Chenin Blanc', year:'2025', price:54.90, isNew:true, image:'https://meanderwines.co.za/wp-content/uploads/2022/05/Meander-Chenin-Blanc-2021.png', description:'Vinho branco jovem, vibrante e frutado. Perfil aromático de frutas tropicais com acidez equilibrada.', pairing:'Saladas, frutos do mar leves, culinária asiática.' },
-  { id:2, name:'Meander Sauvignon Blanc', region:'Western Cape', country:'África do Sul', type:'Branco', grape:'Sauvignon Blanc', year:'2025', price:54.90, isNew:true, image:'https://meanderwines.co.za/wp-content/uploads/2022/05/Meander-Sauvignon-Blanc-2021.png', description:'Extremamente refrescante. Notas herbáceas brilhantes e toques de maracujá e lima.', pairing:'Frutos do mar, queijos de cabra, peixes grelhados.' },
-  { id:3, name:'Meander Pinotage', region:'Western Cape', country:'África do Sul', type:'Tinto', grape:'Pinotage', year:'2023', price:59.90, isNew:true, image:'https://meanderwines.co.za/wp-content/uploads/2022/05/Meander-Pinotage-2021.png', description:'A uva ícone sul-africana. Frutas vermelhas suculentas, taninos macios e toque defumado.', pairing:'Hambúrgueres artesanais, churrasco.' },
-  { id:4, name:'Meander Shiraz', region:'Western Cape', country:'África do Sul', type:'Tinto', grape:'Shiraz', year:'2024', price:59.90, isNew:true, image:'https://meanderwines.co.za/wp-content/uploads/2022/05/Meander-Shiraz-2021.png', description:'Encorpado com frutas escuras e pimenta preta. Final redondo.', pairing:'Carnes assadas, massas com ragu.' },
-  { id:5, name:'Daschbosch Sauvignon Blanc', region:'Breedekloof', country:'África do Sul', type:'Branco', grape:'Sauvignon Blanc', year:'2025', price:79.90, image:'https://daschbosch.co.za/wp-content/uploads/2022/03/db-sauvignon-blanc.png', description:'Maior complexidade e mineralidade do terroir de Breedekloof.', pairing:'Ostras frescas, sushis premium.' },
-  { id:6, name:'Daschbosch Chenin Blanc', region:'Breedekloof', country:'África do Sul', type:'Branco', grape:'Chenin Blanc', year:'2025', price:79.90, image:'https://daschbosch.co.za/wp-content/uploads/2022/03/db-chenin-blanc.png', description:'Interpretação clássica e rica. Notas de melão cantalupo e pêssego branco.', pairing:'Porco assado, risotos de queijo.' },
-  { id:7, name:'Daschbosch Cabernet Sauvignon', region:'Breedekloof', country:'África do Sul', type:'Tinto', grape:'Cabernet Sauvignon', year:'2024', price:89.90, image:'https://daschbosch.co.za/wp-content/uploads/2024/08/Dbos_WineBottles_Gevonden_CabSav.png', description:'Estruturado e potente. Notas de cassis, cedro e especiarias do carvalho.', pairing:'Cortes nobres de carne, risoto de cogumelos.' },
-  { id:8, name:'Daschbosch The Gift', region:'Breedekloof', country:'África do Sul', type:'Tinto', grape:'Blend Tinto', year:'2022', price:149.90, isNew:true, image:'https://daschbosch.co.za/wp-content/uploads/2024/08/Dbos_WineBottles_TheGift.png', description:'Topo de linha. Blend celebrando a viticultura sul-africana. Taninos maduros, frutas negras e chocolate.', pairing:'Cordeiro ao forno, queijos duros maturados.' },
-  { id:9, name:'Daschbosch Methode Ancestrale', region:'Breedekloof', country:'África do Sul', type:'Espumante', grape:'Chenin Blanc / Brut', year:'2025', price:119.90, image:'https://daschbosch.co.za/wp-content/uploads/2024/07/Dbos_WineBottles_MethodeAncestrale-703x1536.png', description:'Espumante Pét-Nat. Perlage delicada e perfil autêntico.', pairing:'Tapas, comida de rua asiática, queijos.' },
-  { id:10, name:'Daschbosch Amphora Grenache', region:'Breedekloof', country:'África do Sul', type:'Tinto', grape:'Grenache', year:'2025', price:139.90, image:'https://daschbosch.co.za/wp-content/uploads/2020/09/2.png', description:'Fermentado em ânforas. Purista e elegante, sem influência de madeira.', pairing:'Tartar de carne, pato assado.' },
-]
+const WhatsAppIcon = ({ size = 18 }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor">
+    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
+  </svg>
+)
 
-export default function Portfolio() {
+export default function Wines() {
   const [params] = useSearchParams()
   const [search, setSearch] = useState('')
-  const [country, setCountry] = useState(params.get('country') || 'all')
+  const [brand, setBrand] = useState(params.get('marca') || 'all')
   const [type, setType] = useState('all')
   const [selected, setSelected] = useState(null)
 
-  useEffect(() => { const c = params.get('country'); if (c) setCountry(c) }, [params])
+  useEffect(() => {
+    const m = params.get('marca')
+    if (m) setBrand(m)
+    const d = params.get('destaque')
+    if (d) {
+      const wine = wines.find(w => w.id === parseInt(d))
+      if (wine) setSelected(wine)
+    }
+  }, [params])
 
   const filtered = wines.filter(w => {
     const ms = w.name.toLowerCase().includes(search.toLowerCase()) || w.grape.toLowerCase().includes(search.toLowerCase())
-    const mc = country === 'all' || w.country === country
+    const mb = brand === 'all' || w.brand === brand
     const mt = type === 'all' || w.type === type
-    return ms && mc && mt
+    return ms && mb && mt
   })
 
-  const countries = ['all', ...new Set(wines.map(w => w.country))]
+  const brands = ['all', ...new Set(wines.map(w => w.brand))]
   const types = ['all', ...new Set(wines.map(w => w.type))]
 
   return (
@@ -45,10 +47,10 @@ export default function Portfolio() {
         <Container>
           <div className="max-w-2xl">
             <nav className="flex items-center gap-2 label text-tx-muted mb-4">
-              <span>Início</span><span className="text-primary">/</span><span className="text-primary">Portfólio</span>
+              <span>Início</span><span className="text-primary">/</span><span className="text-primary">Vinhos</span>
             </nav>
             <h1 className="h1 text-purple mb-4">Nossos <span className="text-primary italic">Vinhos</span></h1>
-            <p className="body-lg text-tx-muted">Curadoria de rótulos excepcionais da África do Sul e Argentina.</p>
+            <p className="body-lg text-tx-muted">Rótulos da África do Sul e Argentina para descobrir, apreciar e compartilhar. Escolha o seu — a gente cuida do resto.</p>
           </div>
         </Container>
       </section>
@@ -59,13 +61,13 @@ export default function Portfolio() {
           <div className="flex flex-col md:flex-row gap-4 items-start md:items-center">
             <div className="relative w-full md:w-64">
               <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-tx-faint" />
-              <input type="text" value={search} onChange={e => setSearch(e.target.value)} placeholder="Buscar rótulo..." className="input-k pl-10" />
+              <input type="text" value={search} onChange={e => setSearch(e.target.value)} placeholder="Buscar vinho..." className="input-k pl-10" />
             </div>
             <div className="flex flex-wrap gap-2">
-              {countries.map(c => (
-                <button key={c} onClick={() => setCountry(c)} className={`px-4 py-2 rounded-full text-[11px] font-medium tracking-wide transition-all border ${
-                  country === c ? 'bg-primary border-primary text-white' : 'bg-transparent border-tx-light text-tx-muted hover:border-primary/50'
-                }`}>{c === 'all' ? 'Todos Países' : c}</button>
+              {brands.map(b => (
+                <button key={b} onClick={() => setBrand(b)} className={`px-4 py-2 rounded-full text-[11px] font-medium tracking-wide transition-all border ${
+                  brand === b ? 'bg-primary border-primary text-white' : 'bg-transparent border-tx-light text-tx-muted hover:border-primary/50'
+                }`}>{b === 'all' ? 'Todas Marcas' : b}</button>
               ))}
               <div className="w-px h-8 bg-tx-light mx-1 hidden md:block" />
               {types.map(t => (
@@ -102,11 +104,13 @@ export default function Portfolio() {
                         </div>
                       </div>
                       <div className="p-5">
-                        <span className="label text-tx-faint">{wine.grape}</span>
-                        <h3 className="h4 text-purple mt-1 mb-1 line-clamp-2 group-hover:text-primary transition-colors">{wine.name}</h3>
-                        <div className="flex items-center justify-between pt-3 border-t border-tx-light/40 mt-3">
-                          <span className="text-xl font-medium text-purple tracking-tight">R$ {wine.price.toFixed(2).replace('.',',')}</span>
+                        <div className="flex items-center gap-2 mb-1">
+                          <span className="label text-tx-faint">{wine.grape}</span>
+                          <span className="text-tx-light">·</span>
+                          <span className="label text-primary/60">{wine.brand}</span>
                         </div>
+                        <h3 className="h4 text-purple mt-1 mb-2 line-clamp-2 group-hover:text-primary transition-colors">{wine.name}</h3>
+                        <p className="text-xs text-tx-muted italic leading-relaxed">{wine.tagline}</p>
                       </div>
                     </div>
                   </motion.div>
@@ -115,8 +119,8 @@ export default function Portfolio() {
             </div>
           ) : (
             <div className="text-center py-20">
-              <p className="h4 text-tx-muted mb-4">Nenhum rótulo encontrado.</p>
-              <Button variant="ghost" onClick={() => { setSearch(''); setCountry('all'); setType('all') }}>Limpar Busca</Button>
+              <p className="h4 text-tx-muted mb-4">Nenhum vinho encontrado.</p>
+              <Button variant="ghost" onClick={() => { setSearch(''); setBrand('all'); setType('all') }}>Limpar Busca</Button>
             </div>
           )}
         </Container>
@@ -147,25 +151,53 @@ export default function Portfolio() {
                   <span className="text-purple/60 font-bold border border-purple/10 px-3 py-1 rounded-md text-sm">Safra {selected.year}</span>
                 </div>
                 <h2 className="h2 text-purple mb-2">{selected.name}</h2>
-                <div className="flex gap-4 items-center mb-8 flex-wrap">
-                  <p className="text-xl text-primary font-semibold">R$ {selected.price.toFixed(2).replace('.',',')}</p>
-                  <span className="label text-tx-muted border-l border-tx-light pl-4">Desconto Atacado para Lojistas</span>
-                </div>
+                <p className="text-primary italic body-lg mb-6">{selected.tagline}</p>
+
                 <div className="space-y-6">
+                  {/* Personality */}
+                  <div className="bg-primary/5 p-4 rounded-xl border border-primary/10">
+                    <p className="text-sm text-purple font-medium italic">"{selected.personality}"</p>
+                  </div>
+
+                  {/* Description */}
                   <div>
-                    <h4 className="label text-tx-muted mb-3">O Perfil Deste Vinho</h4>
+                    <h4 className="label text-tx-muted mb-3">Sobre este Vinho</h4>
                     <p className="body-lg text-tx-secondary leading-relaxed">{selected.description}</p>
                   </div>
+
+                  {/* Tasting Notes */}
+                  {selected.notes && (
+                    <div>
+                      <h4 className="label text-tx-muted mb-3">O que você vai sentir</h4>
+                      <div className="flex flex-wrap gap-2">
+                        {selected.notes.map(n => (
+                          <span key={n} className="px-3 py-1.5 bg-bg-card rounded-full text-sm text-purple font-medium border border-tx-light/40">{n}</span>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Pairing */}
                   <div className="bg-bg-card p-5 rounded-xl border border-tx-light/40">
-                    <h4 className="text-sm font-semibold text-purple mb-2">Harmonização</h4>
+                    <h4 className="text-sm font-semibold text-purple mb-2">Combina com</h4>
                     <p className="text-tx-secondary text-sm">{selected.pairing}</p>
                   </div>
-                  <div className="grid grid-cols-2 gap-4 pt-4 border-t border-tx-light/40">
-                    <div><span className="label text-tx-faint block mb-1">Casta</span><span className="text-purple text-sm font-medium">{selected.grape}</span></div>
-                    <div><span className="label text-tx-faint block mb-1">Terroir</span><span className="text-purple text-sm font-medium">{selected.country} &bull; {selected.region}</span></div>
+
+                  {/* Tech Details */}
+                  <div className="grid grid-cols-3 gap-4 pt-4 border-t border-tx-light/40">
+                    <div><span className="label text-tx-faint block mb-1">Uva</span><span className="text-purple text-sm font-medium">{selected.grape}</span></div>
+                    <div><span className="label text-tx-faint block mb-1">Região</span><span className="text-purple text-sm font-medium">{selected.region}</span></div>
+                    <div><span className="label text-tx-faint block mb-1">Álcool</span><span className="text-purple text-sm font-medium">{selected.alcohol}</span></div>
                   </div>
-                  <div className="pt-6">
-                    <Button variant="gold" size="lg" className="w-full">Tenho Interesse <ShoppingBag size={18} className="ml-2" /></Button>
+
+                  {/* WhatsApp CTA */}
+                  <div className="pt-4">
+                    <a href={getWhatsAppLink(selected.name)} target="_blank" rel="noopener noreferrer"
+                      className="btn-gold btn-lg w-full text-center inline-flex items-center justify-center gap-3">
+                      <WhatsAppIcon size={20} />
+                      Quero Este Vinho
+                    </a>
+                    <p className="text-center text-xs text-tx-faint mt-3">Você será direcionado ao nosso WhatsApp</p>
                   </div>
                 </div>
               </div>
