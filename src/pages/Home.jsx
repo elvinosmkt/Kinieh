@@ -139,7 +139,7 @@ const Home = () => (
             },
           ].map((c, i) => (
             <motion.div key={c.brand} initial={{opacity:0,y:30}} whileInView={{opacity:1,y:0}} viewport={{once:true}} transition={{delay:i*0.15,duration:0.7}}
-              className="group relative h-[460px] overflow-hidden rounded-2xl cursor-pointer shadow-lg">
+              className="group relative h-[320px] md:h-[460px] overflow-hidden rounded-2xl cursor-pointer shadow-lg">
               <img src={c.img} alt={c.brand} className="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110" />
               <div className="absolute inset-0 bg-gradient-to-t from-purple-600 via-purple-600/50 to-transparent opacity-90 group-hover:opacity-80 transition-opacity" />
               <div className="absolute bottom-0 left-0 p-7 w-full z-10">

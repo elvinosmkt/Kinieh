@@ -34,7 +34,7 @@ export default function Navbar() {
         ? 'bg-purple-600/95 backdrop-blur-xl border-b border-white/10 shadow-lg'
         : isHome ? 'bg-transparent' : 'bg-purple-600/90 backdrop-blur-md'
     }`}>
-      <div className="container-k h-20 flex items-center justify-between">
+      <div className="container-k h-16 md:h-20 flex items-center justify-between">
         {/* Logo */}
         <Link to="/" className="flex items-center gap-3 group">
           <div className="w-10 h-10 bg-gradient-to-br from-primary to-gold-dark rounded-full flex items-center justify-center group-hover:scale-110 group-hover:shadow-glow transition-all duration-300 overflow-hidden">
