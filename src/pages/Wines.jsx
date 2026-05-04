@@ -205,7 +205,7 @@ export default function Wines() {
       {/* ═══════ MODAL — Full-screen on mobile, side-by-side on desktop ═══════ */}
       <AnimatePresence>
         {selected && (
-          <div className="fixed inset-0 z-50">
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-0 md:p-6">
             {/* Overlay */}
             <motion.div initial={{opacity:0}} animate={{opacity:1}} exit={{opacity:0}} className="absolute inset-0 bg-purple-600/80 backdrop-blur-sm" onClick={() => setSelected(null)} />
 
@@ -217,12 +217,11 @@ export default function Wines() {
               exit={{opacity:0,y:'100%'}}
               transition={{type:'spring',damping:30,stiffness:300}}
               className="
-                absolute inset-0 md:inset-auto
-                md:top-1/2 md:left-1/2 md:-translate-x-1/2 md:-translate-y-1/2
-                w-full md:w-[90vw] md:max-w-4xl
-                h-full md:h-auto md:max-h-[90vh]
+                relative w-full h-full
+                md:w-[90vw] md:max-w-4xl
+                md:h-auto md:max-h-[90vh]
                 bg-white md:rounded-2xl overflow-y-auto md:overflow-hidden
-                shadow-2xl
+                shadow-2xl z-10
               "
             >
               {/* Close button */}
