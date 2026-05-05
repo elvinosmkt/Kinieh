@@ -134,7 +134,7 @@ const Home = () => (
               origin: 'Mendoza · Agostino Wine Group',
               img: 'https://images.unsplash.com/photo-1601972602237-8c79241e468b?q=80&w=2940',
               desc: 'Alma, Tierra e Herencia — três linhas que expressam a alma, a terra e a tradição de Mendoza. Malbecs de altitude, Torrontés aromáticos e blends inesquecíveis.',
-              filter: 'Telteca Alma',
+              filter: 'Telteca',
               hasWines: true,
             },
           ].map((c, i) => (

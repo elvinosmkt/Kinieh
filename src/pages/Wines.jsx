@@ -17,6 +17,7 @@ export default function Wines() {
   const [params] = useSearchParams()
   const [search, setSearch] = useState('')
   const [brand, setBrand] = useState(params.get('marca') || 'all')
+  const [country, setCountry] = useState(params.get('pais') || 'all')
   const [type, setType] = useState('all')
   const [selected, setSelected] = useState(null)
   const [filtersOpen, setFiltersOpen] = useState(false)
@@ -25,6 +26,8 @@ export default function Wines() {
   useEffect(() => {
     const m = params.get('marca')
     if (m) setBrand(m)
+    const p = params.get('pais')
+    if (p) setCountry(p)
     const d = params.get('destaque')
     if (d) {
       const wine = wines.find(w => w.id === parseInt(d))
@@ -48,12 +51,14 @@ export default function Wines() {
     const ms = w.name.toLowerCase().includes(search.toLowerCase()) || w.grape.toLowerCase().includes(search.toLowerCase())
     const mb = brand === 'all' || w.brand === brand
     const mt = type === 'all' || w.type === type
-    return ms && mb && mt
+    const mc = country === 'all' || w.country === country
+    return ms && mb && mt && mc
   })
 
   const brands = ['all', ...new Set(wines.map(w => w.brand))]
   const types = ['all', ...new Set(wines.map(w => w.type))]
-  const activeFilterCount = (brand !== 'all' ? 1 : 0) + (type !== 'all' ? 1 : 0) + (search ? 1 : 0)
+  const countries = ['all', ...new Set(wines.map(w => w.country))]
+  const activeFilterCount = (brand !== 'all' ? 1 : 0) + (type !== 'all' ? 1 : 0) + (country !== 'all' ? 1 : 0) + (search ? 1 : 0)
 
   return (
     <div className="min-h-screen bg-bg-cream">
@@ -116,6 +121,16 @@ export default function Wines() {
                     </div>
                   </div>
                   <div>
+                    <span className="text-[10px] uppercase tracking-widest text-tx-faint font-medium block mb-2">País</span>
+                    <div className="flex flex-wrap gap-1.5">
+                      {countries.map(c => (
+                        <button key={c} onClick={() => setCountry(c)} className={`px-3 py-1.5 rounded-full text-[11px] font-medium tracking-wide transition-all border ${
+                          country === c ? 'bg-purple border-purple text-white' : 'bg-transparent border-tx-light text-tx-muted'
+                        }`}>{c === 'all' ? 'Todos' : c}</button>
+                      ))}
+                    </div>
+                  </div>
+                  <div>
                     <span className="text-[10px] uppercase tracking-widest text-tx-faint font-medium block mb-2">Tipo</span>
                     <div className="flex flex-wrap gap-1.5">
                       {types.map(t => (
@@ -125,8 +140,8 @@ export default function Wines() {
                       ))}
                     </div>
                   </div>
-                  {(brand !== 'all' || type !== 'all') && (
-                    <button onClick={() => { setBrand('all'); setType('all') }} className="text-xs text-primary font-medium underline underline-offset-2">Limpar filtros</button>
+                  {(brand !== 'all' || type !== 'all' || country !== 'all') && (
+                    <button onClick={() => { setBrand('all'); setType('all'); setCountry('all') }} className="text-xs text-primary font-medium underline underline-offset-2">Limpar filtros</button>
                   )}
                 </div>
               </motion.div>
@@ -146,9 +161,15 @@ export default function Wines() {
                 }`}>{b === 'all' ? 'Todas Marcas' : b}</button>
               ))}
               <div className="w-px h-8 bg-tx-light mx-1" />
+              {countries.map(c => (
+                <button key={c} onClick={() => setCountry(c)} className={`px-4 py-2 rounded-full text-[11px] font-medium tracking-wide transition-all border ${
+                  country === c ? 'bg-purple border-purple text-white' : 'bg-transparent border-tx-light text-tx-muted hover:border-purple/50'
+                }`}>{c === 'all' ? 'Todos Países' : c}</button>
+              ))}
+              <div className="w-px h-8 bg-tx-light mx-1" />
               {types.map(t => (
                 <button key={t} onClick={() => setType(t)} className={`px-4 py-2 rounded-full text-[11px] font-medium tracking-wide transition-all border ${
-                  type === t ? 'bg-purple border-purple text-white' : 'bg-transparent border-tx-light text-tx-muted hover:border-purple/50'
+                  type === t ? 'bg-primary/80 border-primary/80 text-white' : 'bg-transparent border-tx-light text-tx-muted hover:border-primary/50'
                 }`}>{t === 'all' ? 'Todos Tipos' : t}</button>
               ))}
             </div>
@@ -196,7 +217,7 @@ export default function Wines() {
           ) : (
             <div className="text-center py-16 md:py-20">
               <p className="text-lg font-serif text-tx-muted mb-4">Nenhum vinho encontrado.</p>
-              <Button variant="ghost" onClick={() => { setSearch(''); setBrand('all'); setType('all') }}>Limpar Busca</Button>
+              <Button variant="ghost" onClick={() => { setSearch(''); setBrand('all'); setType('all'); setCountry('all') }}>Limpar Busca</Button>
             </div>
           )}
         </Container>
