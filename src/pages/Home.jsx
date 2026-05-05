@@ -6,7 +6,7 @@ import Card from '../components/ui/Card'
 import Container from '../components/ui/Container'
 import wines, { getWhatsAppGeneral } from '../data/wines'
 
-const featured = wines.filter(w => [1, 3, 8, 9, 11].includes(w.id))
+const featured = wines.filter(w => [1, 3, 8, 13, 20].includes(w.id))
 
 const Home = () => (
   <div className="min-h-screen">
@@ -129,13 +129,13 @@ const Home = () => (
               hasWines: true,
             },
             {
-              brand: 'Argentina',
-              tag: 'EM BREVE',
-              origin: 'Mendoza & Mais',
-              img: '/argentina-vineyard.png',
-              desc: 'Malbecs de altitude, Torrontés aromáticos e blends que definiram uma geração de vinhos. Novos rótulos chegando.',
-              filter: null,
-              hasWines: false,
+              brand: 'Telteca',
+              tag: 'ARGENTINA · 3 LINHAS',
+              origin: 'Mendoza · Agostino Wine Group',
+              img: 'https://images.unsplash.com/photo-1601972602237-8c79241e468b?q=80&w=2940',
+              desc: 'Alma, Tierra e Herencia — três linhas que expressam a alma, a terra e a tradição de Mendoza. Malbecs de altitude, Torrontés aromáticos e blends inesquecíveis.',
+              filter: 'Telteca Alma',
+              hasWines: true,
             },
           ].map((c, i) => (
             <motion.div key={c.brand} initial={{opacity:0,y:30}} whileInView={{opacity:1,y:0}} viewport={{once:true}} transition={{delay:i*0.15,duration:0.7}}
