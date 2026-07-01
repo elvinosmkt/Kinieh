@@ -72,7 +72,7 @@ export default function Contact() {
               <div className="space-y-6">
                 {[
                   { icon: MapPin, label: 'Localização', value: 'Batel, Curitiba - PR\nEntregamos em todo Brasil' },
-                  { icon: Phone, label: 'Telefone', value: '+55 (41) 99999-9999' },
+                  { icon: Phone, label: 'Telefone', value: '+55 (41) 98419-2927' },
                   { icon: Mail, label: 'E-mail', value: 'contato@kinieh.com.br' },
                 ].map(({icon:Ic,label,value}) => (
                   <div key={label} className="flex items-start gap-4 p-5 bg-white rounded-xl border border-tx-light/40 shadow-card hover:shadow-card-hover transition-all">

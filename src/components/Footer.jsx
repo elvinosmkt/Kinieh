@@ -67,6 +67,7 @@ export default function Footer() {
                 {[
                   { to: '/vinhos?marca=Meander', l: 'Meander Wines' },
                   { to: '/vinhos?marca=Daschbosch', l: 'Daschbosch' },
+                  { to: '/vinhos?marca=Telteca', l: 'Telteca Argentina' },
                   { to: '/vinhos', l: 'Todos os Vinhos' },
                 ].map(({to, l}) => (
                   <li key={to}><Link to={to} className="body-sm text-white/40 hover:text-primary transition-colors">{l}</Link></li>
@@ -98,7 +99,7 @@ export default function Footer() {
                 </li>
                 <li className="flex items-center gap-3">
                   <Phone size={14} className="text-primary shrink-0" />
-                  <a href="tel:+5541999999999" className="body-sm text-white/40 hover:text-primary transition-colors">+55 (41) 99999-9999</a>
+                  <a href="tel:+5541984192927" className="body-sm text-white/40 hover:text-primary transition-colors">+55 (41) 98419-2927</a>
                 </li>
                 <li className="flex items-center gap-3">
                   <Mail size={14} className="text-primary shrink-0" />

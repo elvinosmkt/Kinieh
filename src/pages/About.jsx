@@ -5,7 +5,7 @@ import KiniehLogo from '../components/ui/KiniehLogo'
 import { getWhatsAppGeneral } from '../data/wines'
 
 const stats = [
-  { value: '12+', label: 'Rótulos Selecionados' },
+  { value: '20+', label: 'Rótulos Selecionados' },
   { value: '2', label: 'Países de Origem' },
   { value: '3', label: 'Vinícolas Parceiras' },
 ]
